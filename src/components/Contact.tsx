@@ -137,7 +137,7 @@ export default function Contact() {
             className="glass p-8 md:p-10 rounded-3xl border border-white/10 relative overflow-hidden"
           >
             {/* Decorative Glow */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-accent-primary/10 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 md:w-64 md:h-64 bg-accent-primary/10 rounded-full blur-[50px] md:blur-[100px] pointer-events-none" />
             
             <form 
               action="https://formsubmit.co/ajax/123vineetpratyush@gmail.com" 

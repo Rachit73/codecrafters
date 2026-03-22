@@ -6,8 +6,8 @@ export default function About() {
   return (
     <section id="about" className="py-24 relative overflow-hidden bg-bg-secondary/50">
       {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-accent-secondary/10 rounded-full blur-[150px] -z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent-primary/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-accent-secondary/10 rounded-full blur-[80px] md:blur-[150px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-accent-primary/10 rounded-full blur-[60px] md:blur-[120px] -z-10 pointer-events-none" />
       
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Header */}

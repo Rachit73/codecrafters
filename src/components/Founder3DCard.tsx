@@ -120,18 +120,18 @@ function HumanAnimeAvatar({ color, delay }: { color: string, delay: number }) {
 export default function Founder3DCard({ color, delay }: { color: string, delay: number }) {
   return (
     <div className="w-full h-full relative z-0 cursor-grab active:cursor-grabbing bg-gradient-to-b from-transparent to-black/20">
-      <Canvas camera={{ position: [0, 0, 5.5], fov: 50 }}>
+      <Canvas camera={{ position: [0, 0, 5.5], fov: 50 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
         <ambientLight intensity={0.6} />
         <directionalLight position={[5, 10, 5]} intensity={1.5} />
         <pointLight position={[-5, 0, 5]} color={color} intensity={2} />
         <HumanAnimeAvatar color={color} delay={delay} />
-        <ContactShadows position={[0, -2.0, 0]} opacity={0.5} scale={10} blur={2} far={4} />
+        <ContactShadows position={[0, -2.0, 0]} opacity={0.5} scale={10} blur={2} far={4} resolution={256} frames={1} />
         <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI / 1.5} minPolarAngle={Math.PI / 3} />
       </Canvas>
       
       {/* Decorative glow */}
       <div 
-        className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[50px] opacity-20 pointer-events-none"
+        className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full blur-[30px] md:blur-[50px] opacity-20 pointer-events-none"
         style={{ backgroundColor: color }}
       />
     </div>

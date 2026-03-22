@@ -1,113 +1,113 @@
-import React, { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Text3D, Center, Float, Stars, Sparkles } from '@react-three/drei';
-import * as THREE from 'three';
+import React from 'react';
+import { Canvas } from '@react-three/fiber';
+import { Html, OrbitControls, ContactShadows, Float, Environment } from '@react-three/drei';
 
-function AnimatedText() {
-  const textRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state, delta) => {
-    if (textRef.current) {
-      // Smooth scale entrance animation
-      textRef.current.scale.lerp(new THREE.Vector3(1, 1, 1), 0.05);
-    }
-  });
-
+function Laptop() {
   return (
-    <Center>
-      <Text3D
-        ref={textRef as any}
-        font="https://unpkg.com/three@0.160.0/examples/fonts/helvetiker_bold.typeface.json"
-        size={1.2}
-        height={0.2}
-        curveSegments={12}
-        bevelEnabled
-        bevelThickness={0.02}
-        bevelSize={0.02}
-        bevelOffset={0}
-        bevelSegments={5}
-        scale={[0, 0, 0]} // Start at 0 for animation
-      >
-        CodeCrafters
-        <meshStandardMaterial 
-          color="#E6F1FF" 
-          emissive="#00F5D4" 
-          emissiveIntensity={0.5} 
-          roughness={0.2} 
-          metalness={0.8} 
-        />
-      </Text3D>
-    </Center>
-  );
-}
+    <group position={[0, -1.2, 0]}>
+      {/* Base */}
+      <mesh position={[0, 0.1, 0]}>
+        <boxGeometry args={[5.4, 0.2, 3.8]} />
+        <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+      </mesh>
+      
+      {/* Keyboard Area */}
+      <mesh position={[0, 0.21, -0.2]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[4.8, 1.8]} />
+        <meshStandardMaterial color="#020617" roughness={0.8} />
+      </mesh>
+      
+      {/* Trackpad */}
+      <mesh position={[0, 0.21, 1.2]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[1.5, 0.8]} />
+        <meshStandardMaterial color="#0f172a" roughness={0.6} />
+      </mesh>
 
-function Scene() {
-  const groupRef = useRef<THREE.Group>(null);
-  const ring1Ref = useRef<THREE.Mesh>(null);
-  const ring2Ref = useRef<THREE.Mesh>(null);
-  const ring3Ref = useRef<THREE.Mesh>(null);
+      {/* Lid */}
+      <group position={[0, 0.2, -1.9]} rotation={[-0.2, 0, 0]}>
+        {/* Lid Casing */}
+        <mesh position={[0, 1.7, 0.05]}>
+          <boxGeometry args={[5.4, 3.4, 0.1]} />
+          <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+        </mesh>
+        
+        {/* Screen Bezel */}
+        <mesh position={[0, 1.7, 0.101]}>
+          <planeGeometry args={[5.2, 3.2]} />
+          <meshStandardMaterial color="#000000" roughness={0.1} />
+        </mesh>
 
-  useFrame((state) => {
-    const t = state.clock.elapsedTime;
-    if (ring1Ref.current) ring1Ref.current.rotation.x = t * 0.5;
-    if (ring2Ref.current) ring2Ref.current.rotation.y = t * 0.3;
-    if (ring3Ref.current) ring3Ref.current.rotation.z = t * 0.2;
-  });
-
-  return (
-    <>
-      <OrbitControls 
-        enableZoom={false} 
-        enablePan={false} 
-        autoRotate 
-        autoRotateSpeed={1.5} 
-        maxPolarAngle={Math.PI / 1.5} 
-        minPolarAngle={Math.PI / 3}
-      />
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 10]} intensity={1} />
-      <pointLight position={[-10, -10, -10]} color="#3B82F6" intensity={5} />
-      <pointLight position={[10, 0, 0]} color="#00F5D4" intensity={5} />
-
-      <Stars radius={50} depth={50} count={3000} factor={4} saturation={0} fade speed={1} />
-      <Sparkles count={150} scale={15} size={2} speed={0.4} opacity={0.5} color="#00F5D4" />
-
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={2}>
-        <group ref={groupRef as any}>
-          <AnimatedText />
-
-          {/* Techy rings */}
-          <mesh ref={ring1Ref as any} rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[5, 0.01, 16, 100]} />
-            <meshStandardMaterial color="#3B82F6" emissive="#3B82F6" emissiveIntensity={2} wireframe />
-          </mesh>
-          <mesh ref={ring2Ref as any} rotation={[Math.PI / 3, Math.PI / 4, 0]}>
-            <torusGeometry args={[6, 0.01, 16, 100]} />
-            <meshStandardMaterial color="#00F5D4" emissive="#00F5D4" emissiveIntensity={2} wireframe />
-          </mesh>
-          <mesh ref={ring3Ref as any} rotation={[-Math.PI / 3, -Math.PI / 4, 0]}>
-            <torusGeometry args={[7, 0.02, 16, 100]} />
-            <meshStandardMaterial color="#E6F1FF" transparent opacity={0.1} wireframe />
-          </mesh>
-          
-          {/* Central glowing core behind text */}
-          <mesh>
-            <icosahedronGeometry args={[3, 1]} />
-            <meshStandardMaterial color="#020617" wireframe transparent opacity={0.3} />
-          </mesh>
-        </group>
-      </Float>
-    </>
+        {/* Screen Content (HTML) */}
+        <Html
+          transform
+          scale={0.01}
+          position={[0, 1.7, 0.11]}
+          rotation={[0, 0, 0]}
+          wrapperClass="pointer-events-none"
+        >
+          <div className="w-[520px] h-[320px] bg-black rounded-md overflow-hidden relative flex items-center justify-center border border-white/10 shadow-[0_0_20px_rgba(0,245,212,0.2)]">
+            {/* Background Video */}
+            <video
+              src="https://cdn.dribbble.com/userupload/11922111/file/original-132b5cc39e9320a1269284e086c39652.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-60"
+            />
+            
+            {/* Overlay Content (Logo & Animation) */}
+            <div className="relative z-10 flex flex-col items-center justify-center bg-black/20 w-full h-full backdrop-blur-[1px]">
+              <div className="animate-[pulse_3s_ease-in-out_infinite] flex flex-col items-center">
+                <div className="animate-[bounce_2s_infinite] mb-4">
+                  <span className="text-[#00F5D4] text-7xl font-bold" style={{ textShadow: '0 0 30px rgba(0,245,212,0.8)' }}>
+                    {`{ }`}
+                  </span>
+                </div>
+                <h1 className="text-white text-4xl font-display font-bold tracking-widest uppercase mb-2" style={{ textShadow: '0 0 20px rgba(0,245,212,0.8)' }}>
+                  CodeCrafters
+                </h1>
+              </div>
+              
+              <div className="mt-6 px-6 py-2 border border-[#00F5D4] text-[#00F5D4] rounded-full text-lg font-semibold animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_15px_rgba(0,245,212,0.5)] bg-black/50">
+                System Active
+              </div>
+            </div>
+          </div>
+        </Html>
+      </group>
+    </group>
   );
 }
 
 export default function InteractiveModel() {
   return (
-    <div className="w-full h-[300px] md:h-[450px] cursor-grab active:cursor-grabbing relative z-20">
-      <Canvas camera={{ position: [0, 0, 12], fov: 45 }}>
-        <Scene />
+    <div className="w-full h-[350px] md:h-[500px] cursor-grab active:cursor-grabbing relative z-20">
+      <Canvas camera={{ position: [0, 1.5, 8], fov: 45 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+        <ambientLight intensity={1} />
+        <directionalLight position={[10, 10, 10]} intensity={2} />
+        <pointLight position={[-10, -10, -10]} color="#3B82F6" intensity={2} />
+        
+        {/* Environment map is CRUCIAL for metal materials to be visible */}
+        <Environment preset="city" />
+        
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          minPolarAngle={Math.PI / 3}
+          maxPolarAngle={Math.PI / 2}
+          minAzimuthAngle={-Math.PI / 4}
+          maxAzimuthAngle={Math.PI / 4}
+        />
+
+        <Float rotationIntensity={0.2} floatIntensity={0.5} speed={2}>
+          <Laptop />
+        </Float>
+
+        <ContactShadows position={[0, -1.8, 0]} opacity={0.6} scale={15} blur={2.5} far={4.5} resolution={256} frames={1} />
       </Canvas>
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-accent-primary/60 tracking-widest uppercase pointer-events-none animate-pulse">
+      
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-accent-primary/60 tracking-widest uppercase pointer-events-none animate-pulse bg-bg-secondary/50 px-4 py-2 rounded-full glass">
         Drag to rotate
       </div>
     </div>
