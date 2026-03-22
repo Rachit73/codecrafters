@@ -1,0 +1,174 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { MessageSquare, X, Send, Loader2 } from 'lucide-react';
+
+export default function Chatbot() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { id: 1, text: "Hi there! 👋 I'm the CodeCrafters assistant. How can I help you today?", isBot: true }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isLoading) return;
+
+    const userText = inputValue.trim();
+    setInputValue('');
+    
+    // Add user message
+    const newUserMsg = { id: Date.now(), text: userText, isBot: false };
+    setMessages(prev => [...prev, newUserMsg]);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userText,
+          history: messages.slice(1) // Exclude initial greeting
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await response.json();
+      
+      const botResponse = {
+        id: Date.now() + 1,
+        text: data.text,
+        isBot: true
+      };
+      setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+      const errorResponse = {
+        id: Date.now() + 1,
+        text: "Sorry, I'm having trouble connecting right now. Please try again later.",
+        isBot: true
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {/* Floating Button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ delay: 2, type: "spring", stiffness: 200, damping: 20 }}
+        onClick={() => setIsOpen(true)}
+        className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-accent-primary text-bg-secondary flex items-center justify-center shadow-2xl neon-glow hover:bg-accent-primary/90 transition-all duration-300 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        style={{ animation: isOpen ? 'none' : 'pulse 2s infinite' }}
+      >
+        <MessageSquare size={28} />
+      </motion.button>
+
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="fixed bottom-6 right-6 z-50 w-[350px] h-[500px] max-h-[80vh] bg-bg-secondary/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="p-4 bg-bg-primary/50 border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-accent-primary/20 flex items-center justify-center border border-accent-primary/30">
+                  <span className="text-accent-primary font-bold">{`{ }`}</span>
+                </div>
+                <div>
+                  <h4 className="text-text-primary font-semibold">CodeCrafters</h4>
+                  <p className="text-xs text-accent-primary flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-accent-primary animate-pulse"></span>
+                    Online
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-text-secondary hover:text-text-primary transition-colors p-2 rounded-full hover:bg-white/5"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+              {messages.map((msg) => (
+                <motion.div
+                  key={msg.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
+                >
+                  <div 
+                    className={`max-w-[85%] p-3 rounded-2xl text-sm leading-relaxed ${
+                      msg.isBot 
+                        ? 'bg-white/5 text-text-primary border border-white/5 rounded-tl-sm' 
+                        : 'bg-accent-primary/20 text-accent-primary border border-accent-primary/30 rounded-tr-sm'
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                </motion.div>
+              ))}
+              {isLoading && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-start"
+                >
+                  <div className="max-w-[85%] p-3 rounded-2xl text-sm bg-white/5 text-text-primary border border-white/5 rounded-tl-sm flex items-center gap-2">
+                    <Loader2 size={16} className="animate-spin text-accent-primary" />
+                    <span className="text-text-secondary">Thinking...</span>
+                  </div>
+                </motion.div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 bg-bg-primary/50 border-t border-white/10">
+              <form onSubmit={handleSend} className="relative flex items-center">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Type your message..."
+                  disabled={isLoading}
+                  className="w-full bg-bg-secondary border border-white/10 rounded-full pl-4 pr-12 py-3 text-sm text-text-primary placeholder-text-secondary/50 focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary transition-all duration-300 disabled:opacity-50"
+                />
+                <button
+                  type="submit"
+                  disabled={!inputValue.trim() || isLoading}
+                  className="absolute right-2 w-8 h-8 rounded-full bg-accent-primary text-bg-secondary flex items-center justify-center hover:bg-accent-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} className="ml-0.5" />}
+                </button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
