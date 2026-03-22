@@ -1,6 +1,142 @@
-import React from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Html, OrbitControls, ContactShadows, Float, Environment } from '@react-three/drei';
+import React, { Suspense, useRef, useState, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, ContactShadows, Float, Environment, PerspectiveCamera, Text, useTexture, Html } from '@react-three/drei';
+import * as THREE from 'three';
+import { LOGO_URL } from '../constants';
+import { Loader2 } from 'lucide-react';
+
+function Loader() {
+  return (
+    <Html center>
+      <div className="flex flex-col items-center gap-3">
+        <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
+        <span className="text-accent-primary font-mono text-xs uppercase tracking-widest">Loading 3D Model...</span>
+      </div>
+    </Html>
+  );
+}
+
+function ScreenContent() {
+  const logoTexture = useTexture(LOGO_URL);
+  const logoRef = useRef<THREE.Group>(null);
+  const [logoPulse, setLogoPulse] = useState(1);
+  const timeRef = useRef(0);
+  
+  const quotes = [
+    "WE BUILD THE DIGITAL FUTURE",
+    "CODE IS POETRY IN MOTION",
+    "DESIGNING TOMORROW, TODAY",
+    "TURNING IDEAS INTO REALITY",
+    "CRAFTING PIXELS WITH PASSION"
+  ];
+  
+  const [currentQuote, setCurrentQuote] = useState(0);
+  const [quoteOpacity, setQuoteOpacity] = useState(0);
+
+  useFrame((state, delta) => {
+    timeRef.current += delta;
+    const t = timeRef.current;
+    
+    // Logo animation
+    if (logoRef.current) {
+      logoRef.current.position.y = Math.sin(t * 2) * 0.05 + 0.3;
+      setLogoPulse(Math.sin(t * 3) * 0.05 + 1);
+    }
+    
+    // Quote animation logic (Fade in/out cycle)
+    const cycleTime = 4; // 4 seconds per quote
+    const progress = (t % cycleTime) / cycleTime;
+    
+    if (progress < 0.1) setQuoteOpacity(progress * 10); // Fade in
+    else if (progress > 0.9) setQuoteOpacity((1 - progress) * 10); // Fade out
+    else setQuoteOpacity(1); // Stay visible
+    
+    // Change quote index
+    const newIdx = Math.floor(t / cycleTime) % quotes.length;
+    if (newIdx !== currentQuote) setCurrentQuote(newIdx);
+  });
+
+  return (
+    <group position={[0, 1.7, 0.11]}>
+      {/* Screen Background - Solid Dark Blue/Black */}
+      <mesh>
+        <planeGeometry args={[5.2, 3.2]} />
+        <meshBasicMaterial color="#020617" />
+      </mesh>
+
+      {/* Animated Grid Effect */}
+      <mesh position={[0, 0, 0.001]}>
+        <planeGeometry args={[5.2, 3.2]} />
+        <meshBasicMaterial color="#00F5D4" transparent opacity={0.05} wireframe />
+      </mesh>
+
+      {/* Logo Overlay */}
+      <group ref={logoRef}>
+        <mesh scale={[logoPulse, logoPulse, 1]}>
+          <planeGeometry args={[0.8, 0.8]} />
+          <meshBasicMaterial map={logoTexture} transparent opacity={0.9} />
+        </mesh>
+
+        <Text
+          position={[0, -0.8, 0.01]}
+          fontSize={0.5}
+          color="white"
+          fontWeight="bold"
+        >
+          Code Crafter
+        </Text>
+        
+        <Text
+          position={[0, -1.2, 0.01]}
+          fontSize={0.15}
+          color="#00F5D4"
+          letterSpacing={0.2}
+        >
+          TECHNOLOGIES
+        </Text>
+      </group>
+
+      {/* Animated Quote Ticker */}
+      <group position={[0, -1.4, 0.01]}>
+        <Text
+          fontSize={0.12}
+          color="#00F5D4"
+          fillOpacity={quoteOpacity}
+        >
+          {quotes[currentQuote]}
+        </Text>
+      </group>
+      
+      {/* Scanning Line */}
+      <ScanningLine />
+      
+      {/* Screen Vignette Overlay */}
+      <mesh position={[0, 0, 0.005]}>
+        <planeGeometry args={[5.2, 3.2]} />
+        <meshBasicMaterial color="black" transparent opacity={0.3} />
+      </mesh>
+    </group>
+  );
+}
+
+function ScanningLine() {
+  const ref = useRef<THREE.Mesh>(null);
+  const timeRef = useRef(0);
+
+  useFrame((state, delta) => {
+    timeRef.current += delta;
+    if (ref.current) {
+      ref.current.position.y = ((timeRef.current % 2) - 1) * 1.6;
+    }
+  });
+
+  return (
+    <mesh ref={ref} position={[0, 0, 0.02]}>
+      <planeGeometry args={[5.2, 0.05]} />
+      <meshBasicMaterial color="#00F5D4" transparent opacity={0.5} />
+    </mesh>
+  );
+}
 
 function Laptop() {
   return (
@@ -8,19 +144,13 @@ function Laptop() {
       {/* Base */}
       <mesh position={[0, 0.1, 0]}>
         <boxGeometry args={[5.4, 0.2, 3.8]} />
-        <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#2d3748" metalness={0.8} roughness={0.2} />
       </mesh>
       
       {/* Keyboard Area */}
       <mesh position={[0, 0.21, -0.2]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[4.8, 1.8]} />
-        <meshStandardMaterial color="#020617" roughness={0.8} />
-      </mesh>
-      
-      {/* Trackpad */}
-      <mesh position={[0, 0.21, 1.2]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[1.5, 0.8]} />
-        <meshStandardMaterial color="#0f172a" roughness={0.6} />
+        <meshStandardMaterial color="#1a202c" roughness={0.8} />
       </mesh>
 
       {/* Lid */}
@@ -28,88 +158,81 @@ function Laptop() {
         {/* Lid Casing */}
         <mesh position={[0, 1.7, 0.05]}>
           <boxGeometry args={[5.4, 3.4, 0.1]} />
-          <meshStandardMaterial color="#1e293b" metalness={0.8} roughness={0.2} />
+          <meshStandardMaterial color="#2d3748" metalness={0.8} roughness={0.2} />
         </mesh>
         
         {/* Screen Bezel */}
         <mesh position={[0, 1.7, 0.101]}>
           <planeGeometry args={[5.2, 3.2]} />
-          <meshStandardMaterial color="#000000" roughness={0.1} />
+          <meshStandardMaterial color="#000000" />
         </mesh>
 
-        {/* Screen Content (HTML) */}
-        <Html
-          transform
-          scale={0.01}
-          position={[0, 1.7, 0.11]}
-          rotation={[0, 0, 0]}
-          wrapperClass="pointer-events-none"
-        >
-          <div className="w-[520px] h-[320px] bg-black rounded-md overflow-hidden relative flex items-center justify-center border border-white/10 shadow-[0_0_20px_rgba(0,245,212,0.2)]">
-            {/* Background Video */}
-            <video
-              src="https://cdn.dribbble.com/userupload/11922111/file/original-132b5cc39e9320a1269284e086c39652.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover opacity-60"
-            />
-            
-            {/* Overlay Content (Logo & Animation) */}
-            <div className="relative z-10 flex flex-col items-center justify-center bg-black/20 w-full h-full backdrop-blur-[1px]">
-              <div className="animate-[pulse_3s_ease-in-out_infinite] flex flex-col items-center">
-                <div className="animate-[bounce_2s_infinite] mb-4">
-                  <span className="text-[#00F5D4] text-7xl font-bold" style={{ textShadow: '0 0 30px rgba(0,245,212,0.8)' }}>
-                    {`{ }`}
-                  </span>
-                </div>
-                <h1 className="text-white text-4xl font-display font-bold tracking-widest uppercase mb-2" style={{ textShadow: '0 0 20px rgba(0,245,212,0.8)' }}>
-                  CodeCrafters
-                </h1>
-              </div>
-              
-              <div className="mt-6 px-6 py-2 border border-[#00F5D4] text-[#00F5D4] rounded-full text-lg font-semibold animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_15px_rgba(0,245,212,0.5)] bg-black/50">
-                System Active
-              </div>
-            </div>
-          </div>
-        </Html>
+        <Suspense fallback={
+          <mesh position={[0, 1.7, 0.105]}>
+            <planeGeometry args={[5.2, 3.2]} />
+            <meshBasicMaterial color="#020617" />
+          </mesh>
+        }>
+          <ScreenContent />
+        </Suspense>
       </group>
     </group>
   );
 }
 
 export default function InteractiveModel() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <div className="w-full h-[350px] md:h-[500px] cursor-grab active:cursor-grabbing relative z-20">
-      <Canvas camera={{ position: [0, 1.5, 8], fov: 45 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+    <div 
+      className="w-full h-[400px] md:h-[600px] cursor-grab active:cursor-grabbing relative z-20 overflow-hidden"
+      style={{ touchAction: 'pan-y' }}
+    >
+      <Canvas 
+        dpr={[1, 2]} 
+        shadows={{ type: THREE.PCFShadowMap }} // Fixed deprecation warning
+        gl={{ antialias: true, alpha: true }}
+        style={{ touchAction: 'pan-y', pointerEvents: 'auto', cursor: 'grab' }}
+      >
+        <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={40} />
         <ambientLight intensity={1} />
-        <directionalLight position={[10, 10, 10]} intensity={2} />
-        <pointLight position={[-10, -10, -10]} color="#3B82F6" intensity={2} />
+        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={2} castShadow />
+        <pointLight position={[-10, -10, -10]} color="#00F5D4" intensity={2} />
         
-        {/* Environment map is CRUCIAL for metal materials to be visible */}
         <Environment preset="city" />
         
         <OrbitControls
           enableZoom={false}
           enablePan={false}
-          minPolarAngle={Math.PI / 3}
-          maxPolarAngle={Math.PI / 2}
-          minAzimuthAngle={-Math.PI / 4}
-          maxAzimuthAngle={Math.PI / 4}
+          enableRotate={true}
+          enableDamping={true}
+          dampingFactor={0.05}
+          rotateSpeed={0.5}
+          minPolarAngle={Math.PI / 4}
+          maxPolarAngle={Math.PI / 1.8}
+          makeDefault
         />
 
-        <Float rotationIntensity={0.2} floatIntensity={0.5} speed={2}>
-          <Laptop />
+        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+          <Suspense fallback={<Loader />}>
+            <group scale={isMobile ? 0.65 : 1}>
+              <Laptop />
+            </group>
+          </Suspense>
         </Float>
 
-        <ContactShadows position={[0, -1.8, 0]} opacity={0.6} scale={15} blur={2.5} far={4.5} resolution={256} frames={1} />
+        <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={20} blur={2} far={4.5} />
       </Canvas>
       
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-accent-primary/60 tracking-widest uppercase pointer-events-none animate-pulse bg-bg-secondary/50 px-4 py-2 rounded-full glass">
-        Drag to rotate
-      </div>
     </div>
   );
 }

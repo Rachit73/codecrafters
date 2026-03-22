@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { Menu, X } from 'lucide-react';
+import { LOGO_URL } from '../constants';
 
 interface NavbarProps {
   activeSection: string;
@@ -43,10 +44,15 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
         <button 
           onClick={(e) => handleNavClick(e, 'home')} 
-          className="text-2xl font-display font-bold text-text-primary flex items-center gap-2 group cursor-pointer bg-transparent border-none p-0"
+          className="text-2xl font-display font-bold text-text-primary flex items-center gap-3 group cursor-pointer bg-transparent border-none p-0"
         >
-          <span className="text-accent-primary group-hover:neon-text transition-all duration-300">{`{ }`}</span>
-          CodeCrafters
+          <img 
+            src={LOGO_URL} 
+            alt="Code Crafter Logo" 
+            className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-110"
+            referrerPolicy="no-referrer"
+          />
+          <span className="group-hover:text-accent-primary transition-colors duration-300">Code Crafter</span>
         </button>
 
         {/* Desktop Nav */}

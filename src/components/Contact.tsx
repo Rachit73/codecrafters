@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { Phone, Mail, MapPin, Send, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Loader2, CheckCircle, AlertCircle, Copy, Check } from 'lucide-react';
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
 
   const formVariants = {
     hidden: { opacity: 0 },
@@ -87,42 +94,66 @@ export default function Contact() {
             </div>
 
             <div className="space-y-6">
-              <div className="flex items-start gap-4 group">
+              <div className="flex items-start gap-4 group relative">
                 <div className="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center shrink-0 border border-accent-primary/20 group-hover:border-accent-primary/50 transition-colors">
                   <Phone className="text-accent-primary" size={24} />
                 </div>
-                <div>
+                <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Phone</h5>
-                  <a href="tel:+919022141119" className="text-lg text-text-primary hover:text-accent-primary transition-colors">
-                    +91 9022141119
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a href="tel:+919022141119" className="text-lg text-text-primary hover:text-accent-primary transition-colors">
+                      +91 9022141119
+                    </a>
+                    <button 
+                      onClick={() => handleCopy('+919022141119', 'phone')}
+                      className="p-1.5 rounded-md hover:bg-white/5 text-text-secondary hover:text-accent-primary transition-all"
+                      title="Copy to clipboard"
+                    >
+                      {copiedField === 'phone' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 group">
+              <div className="flex items-start gap-4 group relative">
                 <div className="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center shrink-0 border border-accent-secondary/20 group-hover:border-accent-secondary/50 transition-colors">
                   <Mail className="text-accent-secondary" size={24} />
                 </div>
-                <div>
+                <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Email</h5>
-                  <a href="mailto:123vineetpratyush@gmail.com" className="text-lg text-text-primary hover:text-accent-secondary transition-colors">
-                    123vineetpratyush@gmail.com
-                  </a>
+                  <div className="flex items-center gap-3">
+                    <a href="mailto:123vineetpratyush@gmail.com" className="text-lg text-text-primary hover:text-accent-secondary transition-colors">
+                      123vineetpratyush@gmail.com
+                    </a>
+                    <button 
+                      onClick={() => handleCopy('123vineetpratyush@gmail.com', 'email')}
+                      className="p-1.5 rounded-md hover:bg-white/5 text-text-secondary hover:text-accent-secondary transition-all"
+                      title="Copy to clipboard"
+                    >
+                      {copiedField === 'email' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 group">
+              <div className="flex items-start gap-4 group relative">
                 <div className="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center shrink-0 border border-accent-primary/20 group-hover:border-accent-primary/50 transition-colors">
                   <MapPin className="text-accent-primary" size={24} />
                 </div>
-                <div>
+                <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Address</h5>
-                  <p className="text-lg text-text-primary leading-relaxed">
-                    CodeCrafters Technologies<br />
-                    4th Floor, Orion Tech Park<br />
-                    Whitefield Main Road<br />
-                    Bangalore, Karnataka, India – 560066
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <p className="text-lg text-text-primary leading-relaxed">
+                      Code Crafter Technologies, Bangalore, India
+                    </p>
+                    <button 
+                      onClick={() => handleCopy('Code Crafter Technologies, 4th Floor, Orion Tech Park, Whitefield Main Road, Bangalore, Karnataka, India – 560066', 'address')}
+                      className="p-1.5 rounded-md hover:bg-white/5 text-text-secondary hover:text-accent-primary transition-all"
+                      title="Copy to clipboard"
+                    >
+                      {copiedField === 'address' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -146,7 +177,7 @@ export default function Contact() {
               className="relative z-10"
             >
               {/* FormSubmit Configuration */}
-              <input type="hidden" name="_subject" value="New Contact from CodeCrafters Website!" />
+              <input type="hidden" name="_subject" value="New Contact from Code Crafter Website!" />
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_template" value="table" />
 

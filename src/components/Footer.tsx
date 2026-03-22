@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Github, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { LOGO_URL } from '../constants';
 
 interface FooterProps {
   setActiveSection: (section: string) => void;
@@ -24,10 +25,15 @@ export default function Footer({ setActiveSection }: FooterProps) {
           <div className="md:col-span-2">
             <button 
               onClick={(e) => handleNavClick(e, 'home')} 
-              className="text-2xl font-display font-bold text-text-primary flex items-center gap-2 group mb-6 inline-flex cursor-pointer bg-transparent border-none p-0"
+              className="text-2xl font-display font-bold text-text-primary flex items-center gap-3 group mb-6 inline-flex cursor-pointer bg-transparent border-none p-0"
             >
-              <span className="text-accent-primary group-hover:neon-text transition-all duration-300">{`{ }`}</span>
-              CodeCrafters
+              <img 
+                src={LOGO_URL} 
+                alt="Code Crafter Logo" 
+                className="w-10 h-10 object-contain"
+                referrerPolicy="no-referrer"
+              />
+              <span>Code Crafter</span>
             </button>
             <p className="text-text-secondary leading-relaxed max-w-md">
               Crafting powerful, scalable, and innovative tech solutions for modern businesses. We turn ideas into reality through code and design.
@@ -79,7 +85,7 @@ export default function Footer({ setActiveSection }: FooterProps) {
         {/* Copyright */}
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-text-secondary">
-            &copy; {currentYear} CodeCrafters Technologies. All rights reserved.
+            &copy; {currentYear} Code Crafter Technologies. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-text-secondary">
             <a href="#" className="hover:text-accent-primary transition-colors">Privacy Policy</a>

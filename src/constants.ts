@@ -1,0 +1,3 @@
+// Custom-designed "Code Crafter" logo - Thicker, bolder, and more professional
+// Teal brackets with a minimalist laptop icon
+export const LOGO_URL = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%2300f5d4' stroke='%2300f5d4' stroke-width='2' d='M40,10H25C12,10,5,17,5,30v12c0,4-3,7-3,7s3,3,3,7v12c0,13,7,20,20,20h15v-15H25c-4,0-5-1-5-5V56c0-6-5-8-5-8s5-2,5-8V32c0-4,1-5,5-5h15V10z'/%3E%3Cpath fill='%2300f5d4' stroke='%2300f5d4' stroke-width='2' d='M60,10h15c13,0,20,7,20,20v12c0,4,3,7,3,7s-3,3-3,7v12c0,13-7,20-20,20H60v-15h15c4,0,5-1,5-5V56c0-6,5-8,5-8s-5-2-5-8V32c0-4-1-5-5-5H60V10z'/%3E%3Cpath fill='white' stroke='white' stroke-width='1' d='M30,35h40v25H30V35z M25,62h50v6H25V62z'/%3E%3C/svg%3E`;

@@ -27,7 +27,7 @@ export default function About() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-6"
           >
-            The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">CodeCrafters</span>
+            The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">Code Crafter</span>
           </motion.h3>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -36,7 +36,7 @@ export default function About() {
             transition={{ delay: 0.2 }}
             className="text-text-secondary max-w-3xl mx-auto text-lg leading-relaxed"
           >
-            CodeCrafters is a modern digital agency focused on crafting powerful, scalable, and innovative tech solutions. We blend cutting-edge technology with premium design to help businesses thrive in the digital age.
+            Code Crafter is a modern digital agency focused on crafting powerful, scalable, and innovative tech solutions. We blend cutting-edge technology with premium design to help businesses thrive in the digital age.
           </motion.p>
         </div>
 
@@ -60,7 +60,7 @@ export default function About() {
               <h4 className="text-3xl font-display font-bold text-text-primary mb-2">Vineet Tiwari</h4>
               <p className="text-accent-primary font-medium text-lg mb-4 tracking-wide uppercase text-sm">Founder & Owner</p>
               <p className="text-text-secondary leading-relaxed">
-                Vineet is the visionary force behind CodeCrafters. With a deep passion for software architecture and innovative design, he leads the agency's mission to transform complex problems into elegant, scalable digital solutions. His expertise in full-stack development ensures that every project is built on a solid, future-proof foundation.
+                Vineet is the visionary force behind Code Crafter. With a deep passion for software architecture and innovative design, he leads the agency's mission to transform complex problems into elegant, scalable digital solutions. His expertise in full-stack development ensures that every project is built on a solid, future-proof foundation.
               </p>
             </div>
           </motion.div>
@@ -82,7 +82,7 @@ export default function About() {
               <h4 className="text-3xl font-display font-bold text-text-primary mb-2">Pratyush Mishra</h4>
               <p className="text-accent-secondary font-medium text-lg mb-4 tracking-wide uppercase text-sm">CEO & Co-Founder</p>
               <p className="text-text-secondary leading-relaxed">
-                Pratyush drives the strategic vision and operational excellence at CodeCrafters. Combining a sharp business acumen with a profound understanding of emerging technologies, he bridges the gap between client goals and technical execution. He is dedicated to delivering premium user experiences and measurable business outcomes.
+                Pratyush drives the strategic vision and operational excellence at Code Crafter. Combining a sharp business acumen with a profound understanding of emerging technologies, he bridges the gap between client goals and technical execution. He is dedicated to delivering premium user experiences and measurable business outcomes.
               </p>
             </div>
           </motion.div>
