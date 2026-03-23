@@ -162,9 +162,11 @@ function Keyboard({ isLowEnd }: { isLowEnd: boolean }) {
   const tempObject = useMemo(() => new THREE.Object3D(), []);
   const tempColor = useMemo(() => new THREE.Color(), []);
 
+  const frameRef = useRef(0);
   useFrame((state, delta) => {
     timeRef.current += delta;
-    if (!instancedMeshRef.current || isLowEnd) return;
+    frameRef.current++;
+    if (!instancedMeshRef.current || isLowEnd || frameRef.current % 2 !== 0) return;
 
     let idx = 0;
     for (let r = 0; r < rows; r++) {
@@ -290,7 +292,7 @@ function Laptop({ isLowEnd }: { isLowEnd: boolean }) {
   );
 }
 
-export default function InteractiveModel() {
+export default React.memo(function InteractiveModel() {
   const { isLowEnd } = usePerformanceMode();
   const [isMobile, setIsMobile] = useState(false);
   const controlsRef = useRef<any>(null);
@@ -398,4 +400,4 @@ export default function InteractiveModel() {
       </Canvas>
     </div>
   );
-}
+});

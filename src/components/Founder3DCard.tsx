@@ -117,7 +117,7 @@ function HumanAnimeAvatar({ color, delay }: { color: string, delay: number }) {
   );
 }
 
-export default function Founder3DCard({ color, delay }: { color: string, delay: number }) {
+export default React.memo(function Founder3DCard({ color, delay }: { color: string, delay: number }) {
   return (
     <div className="w-full h-full relative z-0 cursor-grab active:cursor-grabbing bg-gradient-to-b from-transparent to-black/20">
       <Canvas camera={{ position: [0, 0, 5.5], fov: 50 }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
@@ -136,4 +136,4 @@ export default function Founder3DCard({ color, delay }: { color: string, delay: 
       />
     </div>
   );
-}
+});

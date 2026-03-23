@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import InteractiveModel from './InteractiveModel';
-import TypingHeadline from './TypingHeadline';
 import { useSmoothScroll } from '../context/SmoothScrollContext';
 import { usePerformanceMode } from '../utils/performance';
 
@@ -67,18 +66,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
         >
           Crafting Code, <br className="hidden md:block" />
           <span className="text-accent-primary">
-            <TypingHeadline 
-              phrases={[
-                "Building Futures",
-                "Designing Tomorrow",
-                "Coding Excellence",
-                "Digital Innovation",
-                "Scalable Solutions"
-              ]}
-              typingSpeed={80}
-              deletingSpeed={40}
-              pauseDuration={1000}
-            />
+            Scalable Solutions
           </span>
         </motion.h1>
 
