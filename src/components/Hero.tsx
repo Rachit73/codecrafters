@@ -17,12 +17,9 @@ export default function Hero({ setActiveSection }: HeroProps) {
 
   const handleNavClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    setActiveSection(id);
-    
-    if (lenis) {
-      lenis.scrollTo(0);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const element = document.getElementById(id);
+    if (element && lenis) {
+      lenis.scrollTo(element, { offset: -80 });
     }
   };
 
@@ -33,7 +30,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
   });
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 will-change-transform gpu">
       {/* Background Gradients & Particles */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {!isLowEnd && (
@@ -56,7 +53,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={transition(0)}
-          className="w-full mb-4 will-change-[opacity,transform] transform-gpu"
+          className="w-full mb-4 will-change-transform gpu"
         >
           <InteractiveModel />
         </motion.div>
@@ -66,7 +63,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={transition(0.2)}
-          className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight min-h-[2.5em] md:min-h-[2em] will-change-[opacity,transform] transform-gpu"
+          className="text-5xl md:text-7xl font-display font-bold mb-6 tracking-tight min-h-[2.5em] md:min-h-[2em] will-change-transform gpu"
         >
           Crafting Code, <br className="hidden md:block" />
           <span className="text-accent-primary">
@@ -89,7 +86,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={transition(0.4)}
-          className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed will-change-[opacity,transform] transform-gpu"
+          className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-10 leading-relaxed will-change-transform gpu"
         >
           We build powerful frontend interfaces, robust backend systems, and scalable SaaS products that drive innovation and growth for modern businesses.
         </motion.p>
@@ -99,7 +96,7 @@ export default function Hero({ setActiveSection }: HeroProps) {
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={transition(0.6)}
-          className="flex flex-col sm:flex-row items-center gap-4 will-change-[opacity,transform] transform-gpu"
+          className="flex flex-col sm:flex-row items-center gap-4 will-change-transform gpu"
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -127,13 +124,13 @@ export default function Hero({ setActiveSection }: HeroProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 will-change-[opacity,transform] transform-gpu"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 will-change-transform gpu"
       >
         <span className="text-xs text-text-secondary uppercase tracking-widest font-medium">Scroll</span>
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-          className="w-[1px] h-12 bg-gradient-to-b from-accent-primary to-transparent will-change-[transform] transform-gpu"
+          className="w-[1px] h-12 bg-gradient-to-b from-accent-primary to-transparent will-change-transform gpu"
         />
       </motion.div>
     </section>

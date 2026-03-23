@@ -2,12 +2,14 @@ import React from 'react';
 import { motion } from 'motion/react';
 import Founder3DCard from './Founder3DCard';
 
+import SectionWrapper from './SectionWrapper';
+
 export default function About() {
   return (
-    <section id="about" className="py-24 relative overflow-hidden bg-bg-secondary/50">
+    <SectionWrapper id="about" className="py-24 relative overflow-hidden bg-bg-secondary/50">
       {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-accent-primary/10 rounded-full blur-[80px] md:blur-[150px] -z-10 pointer-events-none opacity-50 md:opacity-100 will-change-[transform]" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-accent-secondary/5 rounded-full blur-[60px] md:blur-[120px] -z-10 pointer-events-none opacity-50 md:opacity-100 will-change-[transform]" />
+      <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-accent-primary/10 rounded-full blur-[80px] md:blur-[150px] -z-10 pointer-events-none opacity-50 md:opacity-100 will-change-transform gpu" />
+      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-accent-secondary/5 rounded-full blur-[60px] md:blur-[120px] -z-10 pointer-events-none opacity-50 md:opacity-100 will-change-transform gpu" />
       
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Header */}
@@ -16,7 +18,7 @@ export default function About() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-accent-primary font-mono text-sm tracking-wider uppercase mb-2 will-change-[transform,opacity] transform-gpu"
+            className="text-accent-primary font-mono text-sm tracking-wider uppercase mb-2 will-change-transform gpu"
           >
             Who We Are
           </motion.h2>
@@ -25,7 +27,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-6 will-change-[transform,opacity] transform-gpu"
+            className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-6 will-change-transform gpu"
           >
             The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">Code Crafter</span>
           </motion.h3>
@@ -34,7 +36,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-text-secondary max-w-3xl mx-auto text-lg leading-relaxed will-change-[transform,opacity] transform-gpu"
+            className="text-text-secondary max-w-3xl mx-auto text-lg leading-relaxed will-change-transform gpu"
           >
             Code Crafter is a modern digital agency focused on crafting powerful, scalable, and innovative tech solutions. We blend cutting-edge technology with premium design to help businesses thrive in the digital age.
           </motion.p>
@@ -49,7 +51,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col will-change-[transform,opacity] transform-gpu"
+            className="flex flex-col will-change-transform gpu"
           >
             <div className="h-[400px] rounded-2xl overflow-hidden glass border border-white/10 mb-8 relative group">
               <Founder3DCard color="#00F5D4" delay={0.2} />
@@ -71,7 +73,7 @@ export default function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="flex flex-col md:mt-16 will-change-[transform,opacity] transform-gpu"
+            className="flex flex-col md:mt-16 will-change-transform gpu"
           >
             <div className="h-[400px] rounded-2xl overflow-hidden glass border border-white/10 mb-8 relative group">
               <Founder3DCard color="#3B82F6" delay={0.4} />
@@ -89,6 +91,6 @@ export default function About() {
 
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

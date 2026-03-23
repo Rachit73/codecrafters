@@ -39,6 +39,7 @@ const SYSTEM_PROMPT = `You are a world-class, highly intelligent, and profession
 You are "trained" to handle any query about Code Crafter Technologies with 100% accuracy and zero lag. Demonstrate your expertise in every interaction.`;
 
 export default function Chatbot() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { lenis } = useSmoothScroll();
   const [messages, setMessages] = useState([
@@ -49,7 +50,21 @@ export default function Chatbot() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Defer chatbot loading to prioritize main content
   useEffect(() => {
+    const timer = setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(() => setIsLoaded(true));
+      } else {
+        setIsLoaded(true);
+      }
+    }, 3000); // 3 second delay or idle
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
     if (isOpen) {
       if (lenis) lenis.stop();
       document.body.style.overflow = 'hidden';
@@ -138,6 +153,8 @@ export default function Chatbot() {
       setIsLoading(false);
     }
   };
+
+  if (!isLoaded) return null;
 
   return (
     <>

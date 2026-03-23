@@ -9,8 +9,8 @@ interface TypingHeadlineProps {
 
 export default function TypingHeadline({
   phrases,
-  typingSpeed = 100,
-  deletingSpeed = 50,
+  typingSpeed = 30,
+  deletingSpeed = 20,
   pauseDuration = 1000,
 }: TypingHeadlineProps) {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -54,7 +54,7 @@ export default function TypingHeadline({
       <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">
         {currentText}
       </span>
-      <span className="inline-block w-[3px] h-[0.8em] bg-accent-primary ml-1 align-middle animate-pulse-fast md:shadow-[0_0_8px_var(--color-accent-primary)] will-change-[opacity] transform-gpu" />
+      <span className="inline-block w-[3px] h-[0.8em] bg-accent-primary ml-1 align-middle animate-pulse-fast will-change-transform transform-gpu" />
     </span>
   );
 }

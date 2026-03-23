@@ -16,16 +16,16 @@ export const SmoothScrollProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     const lenis = new Lenis({
-      duration: isMobile ? 1.0 : 1.5,
-      lerp: isMobile ? 0.15 : 0.1,
+      duration: isMobile ? 1.2 : 1.8,
+      lerp: isMobile ? 0.12 : 0.08,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: isMobile ? 1.5 : 2.8,
+      wheelMultiplier: 1.0,
+      touchMultiplier: isMobile ? 1.2 : 2.5,
       infinite: false,
-      syncTouch: true, // Better sync for mobile touch
+      syncTouch: true,
     });
 
     lenisRef.current = lenis;

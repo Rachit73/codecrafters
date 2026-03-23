@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { Layout, Server, Database, Cloud, HardDrive, Globe, Video, Megaphone, TrendingUp } from 'lucide-react';
 import { usePerformanceMode } from '../utils/performance';
 
+import SectionWrapper from './SectionWrapper';
+
 const services = [
   {
     title: 'Frontend',
@@ -51,25 +53,6 @@ const services = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: any = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-};
-
 export default function Services() {
   const { isLowEnd } = usePerformanceMode();
 
@@ -93,7 +76,7 @@ export default function Services() {
   };
 
   return (
-    <section id="services" className="py-24 relative z-10">
+    <SectionWrapper id="services" className="py-24 relative z-10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: isLowEnd ? 0 : 20 }}
@@ -113,7 +96,7 @@ export default function Services() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 will-change-transform gpu"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => (
             <motion.div
@@ -142,6 +125,6 @@ export default function Services() {
           ))}
         </motion.div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

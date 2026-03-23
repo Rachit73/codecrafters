@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 import { LOGO_URL } from '../constants';
-import { useSmoothScroll } from '../context/SmoothScrollContext';
 
 interface NavbarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
 }
 
-export default function Navbar({ activeSection, setActiveSection }: NavbarProps) {
+export default React.memo(function Navbar({ activeSection, setActiveSection }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
-  const { lenis } = useSmoothScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
@@ -24,19 +22,14 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     { name: 'Services', id: 'services' },
     { name: 'About', id: 'about' },
     { name: 'Portfolio', id: 'portfolio' },
+    { name: 'FAQ', id: 'faq' },
     { name: 'Contact', id: 'contact' },
   ];
 
   const handleNavClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    setActiveSection(id);
     setIsMobileMenuOpen(false);
-    
-    if (lenis) {
-      lenis.scrollTo(0);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    setActiveSection(id);
   };
 
   return (
@@ -123,4 +116,4 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       )}
     </motion.nav>
   );
-}
+});

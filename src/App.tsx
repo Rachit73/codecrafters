@@ -3,24 +3,32 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Services from './components/Services';
-import About from './components/About';
-import Portfolio from './components/Portfolio';
-import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Chatbot from './components/Chatbot';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SmoothScrollProvider, useSmoothScroll } from './context/SmoothScrollContext';
 import { throttle } from './utils/eventUtils';
 
+// Lazy load non-critical sections
+const Services = lazy(() => import('./components/Services'));
+const About = lazy(() => import('./components/About'));
+const Portfolio = lazy(() => import('./components/Portfolio'));
+const FAQ = lazy(() => import('./components/FAQ'));
+const Contact = lazy(() => import('./components/Contact'));
+const Chatbot = lazy(() => import('./components/Chatbot'));
+
+const LoadingFallback = () => (
+  <div className="w-full h-[400px] flex items-center justify-center text-accent-primary">
+    <Loader2 className="animate-spin" size={32} />
+  </div>
+);
+
 function AppContent() {
   const [activeSection, setActiveSection] = useState('home');
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const { lenis } = useSmoothScroll();
 
   useEffect(() => {
     const handleScroll = throttle(() => {
@@ -35,39 +43,46 @@ function AppContent() {
   }, []);
 
   const scrollToTop = () => {
-    if (lenis) {
-      lenis.scrollTo(0);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    setActiveSection('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const renderSection = () => {
     switch (activeSection) {
+      case 'services': return <Services />;
+      case 'about': return <About />;
+      case 'portfolio': return <Portfolio />;
+      case 'faq': return <FAQ />;
+      case 'contact': return <Contact />;
       case 'home':
-        return <Hero setActiveSection={setActiveSection} />;
-      case 'services':
-        return <Services />;
-      case 'about':
-        return <About />;
-      case 'portfolio':
-        return <Portfolio />;
-      case 'contact':
-        return <Contact />;
-      default:
-        return <Hero setActiveSection={setActiveSection} />;
+      default: return <Hero setActiveSection={setActiveSection} />;
     }
   };
 
   return (
     <div className="min-h-screen bg-bg-secondary text-text-primary selection:bg-accent-primary/30 selection:text-accent-primary flex flex-col">
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <main className="flex-grow pt-20">
-        {renderSection()}
+      
+      <main className="flex-grow pt-24">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeSection}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <Suspense fallback={<LoadingFallback />}>
+              {renderSection()}
+            </Suspense>
+          </motion.div>
+        </AnimatePresence>
       </main>
+
       <Footer setActiveSection={setActiveSection} />
-      <Chatbot />
+      
+      <Suspense fallback={null}>
+        <Chatbot />
+      </Suspense>
 
       {/* Back to Top Button */}
       <AnimatePresence>

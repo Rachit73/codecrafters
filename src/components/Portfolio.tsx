@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { ExternalLink } from 'lucide-react';
 import { usePerformanceMode } from '../utils/performance';
 
+import SectionWrapper from './SectionWrapper';
+
 const projects = [
   {
     title: 'E-Commerce Storefront',
@@ -51,26 +53,6 @@ const projects = [
   },
 ];
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants: any = {
-  hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-};
-
 export default function Portfolio() {
   const { isLowEnd } = usePerformanceMode();
 
@@ -95,7 +77,7 @@ export default function Portfolio() {
   };
 
   return (
-    <section id="portfolio" className="py-24 relative z-10">
+    <SectionWrapper id="portfolio" className="py-24 relative z-10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div
           initial={{ opacity: 0, y: isLowEnd ? 0 : 20 }}
@@ -165,13 +147,13 @@ export default function Portfolio() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-16 text-center will-change-[transform,opacity] transform-gpu"
+          className="mt-16 text-center will-change-transform gpu"
         >
           <a href="#" className="px-8 py-4 rounded-full glass border border-accent-primary text-accent-primary hover:bg-accent-primary/10 transition-all duration-300 neon-glow-hover inline-flex">
             View All Projects
           </a>
         </motion.div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

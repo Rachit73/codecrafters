@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Instagram, MessageCircle } from 'lucide-react';
 import { LOGO_URL } from '../constants';
-import { useSmoothScroll } from '../context/SmoothScrollContext';
 import LegalModal from './LegalModal';
 
 interface FooterProps {
   setActiveSection: (section: string) => void;
 }
 
-export default function Footer({ setActiveSection }: FooterProps) {
+export default React.memo(function Footer({ setActiveSection }: FooterProps) {
   const currentYear = new Date().getFullYear();
-  const { lenis } = useSmoothScroll();
   const [legalModal, setLegalModal] = useState<{ isOpen: boolean; type: 'privacy' | 'terms' }>({
     isOpen: false,
     type: 'privacy'
@@ -20,12 +18,7 @@ export default function Footer({ setActiveSection }: FooterProps) {
   const handleNavClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     setActiveSection(id);
-    
-    if (lenis) {
-      lenis.scrollTo(0);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const openLegalModal = (e: React.MouseEvent, type: 'privacy' | 'terms') => {
@@ -126,4 +119,4 @@ export default function Footer({ setActiveSection }: FooterProps) {
       />
     </footer>
   );
-}
+});
