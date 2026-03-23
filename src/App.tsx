@@ -14,21 +14,32 @@ import Footer from './components/Footer';
 import Chatbot from './components/Chatbot';
 import { ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { SmoothScrollProvider, useSmoothScroll } from './context/SmoothScrollContext';
+import { throttle } from './utils/eventUtils';
 
-export default function App() {
+function AppContent() {
   const [activeSection, setActiveSection] = useState('home');
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const { lenis } = useSmoothScroll();
 
   useEffect(() => {
-    const handleScroll = () => {
+    const handleScroll = throttle(() => {
       setShowBackToTop(window.scrollY > 500);
+    }, 100);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     setActiveSection('home');
   };
 
@@ -66,7 +77,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: 20 }}
             onClick={scrollToTop}
-            className="fixed bottom-24 right-6 z-40 w-12 h-12 rounded-full bg-accent-primary text-bg-secondary flex items-center justify-center neon-glow hover:bg-accent-primary/90 transition-colors shadow-lg cursor-pointer border-none"
+            className="fixed bottom-24 right-6 z-40 w-12 h-12 rounded-full bg-accent-primary text-bg-secondary flex items-center justify-center neon-glow hover:bg-accent-primary/90 transition-colors shadow-lg cursor-pointer border-none will-change-transform gpu"
             title="Back to top"
           >
             <ChevronUp size={24} />
@@ -74,5 +85,13 @@ export default function App() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <SmoothScrollProvider>
+      <AppContent />
+    </SmoothScrollProvider>
   );
 }

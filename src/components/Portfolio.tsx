@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ExternalLink } from 'lucide-react';
+import { usePerformanceMode } from '../utils/performance';
 
 const projects = [
   {
@@ -71,15 +72,37 @@ const itemVariants: any = {
 };
 
 export default function Portfolio() {
+  const { isLowEnd } = usePerformanceMode();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: isLowEnd ? 0 : 0.1,
+      },
+    },
+  };
+
+  const itemVariants: any = {
+    hidden: { opacity: 0, scale: isLowEnd ? 1 : 0.95, y: isLowEnd ? 0 : 20 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    },
+  };
+
   return (
     <section id="portfolio" className="py-24 relative z-10">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: isLowEnd ? 0 : 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16"
+          className="text-center mb-16 will-change-transform gpu"
         >
           <h2 className="text-sm font-semibold text-accent-primary uppercase tracking-widest mb-2">Our Work</h2>
           <h3 className="text-4xl md:text-5xl font-display font-bold text-text-primary">
@@ -92,30 +115,31 @@ export default function Portfolio() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 will-change-transform gpu"
         >
           {projects.map((project, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
-              className="group relative rounded-2xl overflow-hidden aspect-[4/3] cursor-pointer"
+              className="group relative rounded-2xl overflow-hidden aspect-[4/3] cursor-pointer will-change-transform gpu"
             >
               {/* Image */}
               <div className="absolute inset-0 w-full h-full">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  loading="lazy"
+                  className={`w-full h-full object-cover transition-transform duration-700 ease-out ${!isLowEnd ? 'group-hover:scale-110' : ''}`}
                   referrerPolicy="no-referrer"
                 />
               </div>
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-bg-secondary via-bg-secondary/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+              <div className={`absolute inset-0 bg-gradient-to-t from-bg-secondary via-bg-secondary/50 to-transparent transition-opacity duration-500 ${!isLowEnd ? 'opacity-60 group-hover:opacity-80' : 'opacity-70'}`} />
               
               {/* Content */}
               <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                <div className="translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out">
+                <div className={`${!isLowEnd ? 'translate-y-8 opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100' : 'opacity-100'} transition-all duration-500 ease-out will-change-transform gpu`}>
                   <span className="text-accent-primary text-sm font-medium tracking-wider uppercase mb-2 block">
                     {project.category}
                   </span>
@@ -129,7 +153,9 @@ export default function Portfolio() {
               </div>
 
               {/* Hover Border Glow */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent-primary/50 rounded-2xl transition-colors duration-500 pointer-events-none" />
+              {!isLowEnd && (
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-accent-primary/50 rounded-2xl transition-colors duration-500 pointer-events-none" />
+              )}
             </motion.div>
           ))}
         </motion.div>
@@ -139,9 +165,9 @@ export default function Portfolio() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-16 text-center"
+          className="mt-16 text-center will-change-[transform,opacity] transform-gpu"
         >
-          <a href="#" className="px-8 py-4 rounded-full glass border border-accent-primary text-accent-primary font-semibold hover:bg-accent-primary/10 transition-all duration-300 neon-glow-hover inline-flex">
+          <a href="#" className="px-8 py-4 rounded-full glass border border-accent-primary text-accent-primary hover:bg-accent-primary/10 transition-all duration-300 neon-glow-hover inline-flex">
             View All Projects
           </a>
         </motion.div>

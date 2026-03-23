@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useMotionValueEvent } from 'motion/react';
 import { Menu, X } from 'lucide-react';
 import { LOGO_URL } from '../constants';
+import { useSmoothScroll } from '../context/SmoothScrollContext';
 
 interface NavbarProps {
   activeSection: string;
@@ -12,6 +13,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
+  const { lenis } = useSmoothScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 50);
@@ -29,7 +31,12 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
     e.preventDefault();
     setActiveSection(id);
     setIsMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -37,7 +44,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 will-change-[transform,opacity] transform-gpu ${
         isScrolled ? 'glass py-4 shadow-lg' : 'bg-transparent py-6'
       }`}
     >
@@ -93,7 +100,7 @@ export default function Navbar({ activeSection, setActiveSection }: NavbarProps)
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-full left-0 right-0 glass border-t border-white/10 py-4 px-6 flex flex-col gap-4 shadow-2xl"
+          className="md:hidden absolute top-full left-0 right-0 glass border-t border-white/10 py-4 px-6 flex flex-col gap-4 shadow-2xl will-change-[transform,opacity] transform-gpu"
         >
           {navLinks.map((link) => (
             <button

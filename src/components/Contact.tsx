@@ -69,11 +69,11 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-16"
+          className="text-center mb-16 will-change-[transform,opacity] transform-gpu"
         >
-          <h2 className="text-sm font-semibold text-accent-primary uppercase tracking-widest mb-2">Get In Touch</h2>
+          <h2 className="text-sm font-semibold text-white uppercase tracking-widest mb-2">Get In Touch</h2>
           <h3 className="text-4xl md:text-5xl font-display font-bold text-text-primary">
-            Let's Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">Together</span>
+            Let's Build <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400">Together</span>
           </h3>
         </motion.div>
 
@@ -84,7 +84,7 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="space-y-10"
+            className="space-y-10 will-change-[transform,opacity] transform-gpu"
           >
             <div>
               <h4 className="text-2xl font-display font-bold text-text-primary mb-6">Contact Information</h4>
@@ -95,13 +95,13 @@ export default function Contact() {
 
             <div className="space-y-6">
               <div className="flex items-start gap-4 group relative">
-                <div className="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center shrink-0 border border-accent-primary/20 group-hover:border-accent-primary/50 transition-colors">
-                  <Phone className="text-accent-primary" size={24} />
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20 group-hover:border-white/50 transition-colors">
+                  <Phone className="text-white" size={24} />
                 </div>
                 <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Phone</h5>
                   <div className="flex items-center gap-3">
-                    <a href="tel:+919022141119" className="text-lg text-text-primary hover:text-accent-primary transition-colors">
+                    <a href="tel:+919022141119" className="text-lg text-text-primary hover:text-white transition-colors">
                       +91 9022141119
                     </a>
                     <button 
@@ -116,13 +116,13 @@ export default function Contact() {
               </div>
 
               <div className="flex items-start gap-4 group relative">
-                <div className="w-12 h-12 rounded-xl bg-accent-secondary/10 flex items-center justify-center shrink-0 border border-accent-secondary/20 group-hover:border-accent-secondary/50 transition-colors">
-                  <Mail className="text-accent-secondary" size={24} />
+                <div className="w-12 h-12 rounded-xl bg-slate-400/10 flex items-center justify-center shrink-0 border border-slate-400/20 group-hover:border-slate-400/50 transition-colors">
+                  <Mail className="text-slate-400" size={24} />
                 </div>
                 <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Email</h5>
                   <div className="flex items-center gap-3">
-                    <a href="mailto:123vineetpratyush@gmail.com" className="text-lg text-text-primary hover:text-accent-secondary transition-colors">
+                    <a href="mailto:123vineetpratyush@gmail.com" className="text-lg text-text-primary hover:text-slate-400 transition-colors">
                       123vineetpratyush@gmail.com
                     </a>
                     <button 
@@ -137,8 +137,8 @@ export default function Contact() {
               </div>
 
               <div className="flex items-start gap-4 group relative">
-                <div className="w-12 h-12 rounded-xl bg-accent-primary/10 flex items-center justify-center shrink-0 border border-accent-primary/20 group-hover:border-accent-primary/50 transition-colors">
-                  <MapPin className="text-accent-primary" size={24} />
+                <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 border border-white/20 group-hover:border-white/50 transition-colors">
+                  <MapPin className="text-white" size={24} />
                 </div>
                 <div className="flex-grow">
                   <h5 className="text-sm font-semibold text-text-secondary uppercase tracking-wider mb-1">Address</h5>
@@ -148,7 +148,7 @@ export default function Contact() {
                     </p>
                     <button 
                       onClick={() => handleCopy('Code Crafter Technologies, 4th Floor, Orion Tech Park, Whitefield Main Road, Bangalore, Karnataka, India – 560066', 'address')}
-                      className="p-1.5 rounded-md hover:bg-white/5 text-text-secondary hover:text-accent-primary transition-all"
+                      className="p-1.5 rounded-md hover:bg-white/5 text-text-secondary hover:text-white transition-all"
                       title="Copy to clipboard"
                     >
                       {copiedField === 'address' ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -165,10 +165,10 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="glass p-8 md:p-10 rounded-3xl border border-white/10 relative overflow-hidden"
+            className="glass p-8 md:p-10 rounded-3xl border border-white/10 relative overflow-hidden will-change-[transform,opacity] transform-gpu"
           >
             {/* Decorative Glow */}
-            <div className="absolute top-0 right-0 w-32 h-32 md:w-64 md:h-64 bg-accent-primary/10 rounded-full blur-[50px] md:blur-[100px] pointer-events-none" />
+            <div className="absolute top-0 right-0 w-32 h-32 md:w-64 md:h-64 bg-accent-primary/10 rounded-full blur-[50px] md:blur-[100px] pointer-events-none opacity-50 md:opacity-100" />
             
             <form 
               action="https://formsubmit.co/ajax/123vineetpratyush@gmail.com" 
@@ -181,9 +181,9 @@ export default function Contact() {
               <input type="hidden" name="_captcha" value="false" />
               <input type="hidden" name="_template" value="table" />
 
-              <motion.div variants={formVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="space-y-6">
+              <motion.div variants={formVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} className="space-y-6 will-change-[transform,opacity] transform-gpu">
                 
-                <motion.div variants={fieldVariants}>
+                <motion.div variants={fieldVariants} className="will-change-[transform,opacity] transform-gpu">
                   <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-2">Full Name</label>
                   <input 
                     type="text" 
@@ -197,7 +197,7 @@ export default function Contact() {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <motion.div variants={fieldVariants}>
+                  <motion.div variants={fieldVariants} className="will-change-[transform,opacity] transform-gpu">
                     <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-2">Email Address</label>
                     <input 
                       type="email" 
@@ -210,7 +210,7 @@ export default function Contact() {
                     />
                   </motion.div>
 
-                  <motion.div variants={fieldVariants}>
+                  <motion.div variants={fieldVariants} className="will-change-[transform,opacity] transform-gpu">
                     <label htmlFor="phone" className="block text-sm font-medium text-text-secondary mb-2">Phone Number</label>
                     <input 
                       type="tel" 
@@ -224,7 +224,7 @@ export default function Contact() {
                   </motion.div>
                 </div>
 
-                <motion.div variants={fieldVariants}>
+                <motion.div variants={fieldVariants} className="will-change-[transform,opacity] transform-gpu">
                   <label htmlFor="service" className="block text-sm font-medium text-text-secondary mb-2">Service Required</label>
                   <select 
                     id="service" 
@@ -248,7 +248,7 @@ export default function Contact() {
                   </select>
                 </motion.div>
 
-                <motion.div variants={fieldVariants}>
+                <motion.div variants={fieldVariants} className="will-change-[transform,opacity] transform-gpu">
                   <label htmlFor="message" className="block text-sm font-medium text-text-secondary mb-2">Message</label>
                   <textarea 
                     id="message" 
@@ -283,13 +283,13 @@ export default function Contact() {
                   </motion.div>
                 )}
 
-                <motion.div variants={fieldVariants} className="pt-4">
+                <motion.div variants={fieldVariants} className="pt-4 will-change-[transform,opacity] transform-gpu">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl bg-accent-primary text-bg-secondary font-bold text-lg flex items-center justify-center gap-2 neon-glow hover:bg-accent-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full py-4 rounded-xl bg-accent-primary text-bg-secondary font-bold text-lg flex items-center justify-center gap-2 neon-glow hover:bg-accent-primary/90 transition-colors disabled:opacity-70 disabled:cursor-not-allowed will-change-transform transform-gpu"
                   >
                     {isSubmitting ? (
                       <>
