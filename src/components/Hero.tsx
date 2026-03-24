@@ -2,7 +2,6 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import InteractiveModel from './InteractiveModel';
-import { useSmoothScroll } from '../context/SmoothScrollContext';
 import { usePerformanceMode } from '../utils/performance';
 
 interface HeroProps {
@@ -10,16 +9,13 @@ interface HeroProps {
 }
 
 export default function Hero({ setActiveSection }: HeroProps) {
-  const { lenis } = useSmoothScroll();
   const { isLowEnd } = usePerformanceMode();
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   const handleNavClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    const element = document.getElementById(id);
-    if (element && lenis) {
-      lenis.scrollTo(element, { offset: -80 });
-    }
+    setActiveSection(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const transition = (delay: number) => ({

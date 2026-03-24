@@ -30,6 +30,7 @@ export default React.memo(function Navbar({ activeSection, setActiveSection }: N
     e.preventDefault();
     setIsMobileMenuOpen(false);
     setActiveSection(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

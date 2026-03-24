@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, X, Send, Loader2 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
-import { useSmoothScroll } from '../context/SmoothScrollContext';
 
 const SYSTEM_PROMPT = `You are a world-class, highly intelligent, and professional AI assistant for Code Crafter Technologies. Your goal is to provide exceptional service, demonstrating deep knowledge and a friendly, proactive attitude.
 
@@ -41,7 +39,6 @@ You are "trained" to handle any query about Code Crafter Technologies with 100% 
 export default function Chatbot() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { lenis } = useSmoothScroll();
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi there! 👋 I'm the Code Crafter assistant. How can I help you today?", isBot: true }
   ]);
@@ -50,33 +47,22 @@ export default function Chatbot() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Defer chatbot loading to prioritize main content
+  // Load chatbot immediately
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(() => setIsLoaded(true));
-      } else {
-        setIsLoaded(true);
-      }
-    }, 3000); // 3 second delay or idle
-
-    return () => clearTimeout(timer);
+    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
     if (!isLoaded) return;
     if (isOpen) {
-      if (lenis) lenis.stop();
       document.body.style.overflow = 'hidden';
     } else {
-      if (lenis) lenis.start();
       document.body.style.overflow = 'unset';
     }
     return () => {
-      if (lenis) lenis.start();
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, lenis]);
+  }, [isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -99,13 +85,72 @@ export default function Chatbot() {
     setMessages(prev => [...prev, { id: botMsgId, text: '', isBot: true }]);
 
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("API_KEY_MISSING");
+      // 1. Try Groq (via Backend)
+      try {
+        const history = messages.slice(1).map(msg => ({
+          role: msg.isBot ? 'assistant' : 'user',
+          content: msg.text
+        }));
+
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: [...history, { role: 'user', content: userText }],
+            systemPrompt: SYSTEM_PROMPT
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error("GROQ_FAILED");
+        }
+
+        const reader = response.body?.getReader();
+        const decoder = new TextDecoder();
+        let fullText = '';
+        let isFirstChunk = true;
+
+        if (reader) {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value);
+            const lines = chunk.split('\n');
+            
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6);
+                if (data === '[DONE]') break;
+                
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.content) {
+                    fullText += parsed.content;
+                    if (isFirstChunk) {
+                      setIsLoading(false);
+                      isFirstChunk = false;
+                    }
+                    setMessages(prev => prev.map(msg => 
+                      msg.id === botMsgId ? { ...msg, text: fullText } : msg
+                    ));
+                  }
+                } catch (e) { }
+              }
+            }
+          }
+          return; // Success with Groq
+        }
+      } catch (groqError) {
+        console.warn("Groq failed, falling back to Gemini:", groqError);
       }
+
+      // 2. Fallback to Gemini (Frontend)
+      const { GoogleGenAI } = await import("@google/genai");
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey) throw new Error("No API keys configured");
+
       const ai = new GoogleGenAI({ apiKey });
-      
-      // Format history for Gemini
       const historyForGemini = messages.slice(1).map(msg => ({
         role: msg.isBot ? 'model' : 'user',
         parts: [{ text: msg.text }]
@@ -113,39 +158,28 @@ export default function Chatbot() {
 
       const chat = ai.chats.create({
         model: "gemini-3-flash-preview",
-        config: {
-          systemInstruction: SYSTEM_PROMPT,
-        },
+        config: { systemInstruction: SYSTEM_PROMPT },
         history: historyForGemini as any,
       });
       
       const result = await chat.sendMessageStream({ message: userText });
-      
       let fullText = '';
       let isFirstChunk = true;
       
       for await (const chunk of result) {
-        const chunkText = chunk.text;
-        fullText += chunkText;
-        
+        fullText += chunk.text;
         if (isFirstChunk) {
-          setIsLoading(false); // Hide "Thinking..." once we start getting text
+          setIsLoading(false);
           isFirstChunk = false;
         }
-        
-        // Update the bot message in real-time
         setMessages(prev => prev.map(msg => 
           msg.id === botMsgId ? { ...msg, text: fullText } : msg
         ));
       }
       
     } catch (error) {
-      console.error("Error sending message:", error);
-      const isApiKeyMissing = error instanceof Error && error.message === "API_KEY_MISSING";
-      const errorText = isApiKeyMissing 
-        ? "The Gemini API key is missing. Please configure GEMINI_API_KEY in your environment variables."
-        : "Sorry, I'm having trouble connecting right now. Please try again later.";
-      
+      console.error("All AI models failed:", error);
+      const errorText = "Sorry, I'm having trouble connecting to my brain right now. Please check your API keys or try again later.";
       setMessages(prev => prev.map(msg => 
         msg.id === botMsgId ? { ...msg, text: errorText } : msg
       ));
@@ -162,7 +196,7 @@ export default function Chatbot() {
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ delay: 2, type: "spring", stiffness: 200, damping: 20 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
         onClick={() => setIsOpen(true)}
         className={`fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-accent-primary text-bg-secondary flex items-center justify-center shadow-2xl neon-glow hover:bg-accent-primary/90 transition-all duration-300 will-change-transform transform-gpu ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
         style={{ animation: isOpen ? 'none' : 'pulse 2s infinite' }}
@@ -205,7 +239,6 @@ export default function Chatbot() {
             {/* Messages Area */}
             <div 
               className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent overscroll-contain"
-              data-lenis-prevent
             >
               {messages.map((msg) => (
                 <motion.div

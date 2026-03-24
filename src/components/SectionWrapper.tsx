@@ -31,6 +31,8 @@ export default function SectionWrapper({
     }
   }, [isInView, isRendered]);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <section 
       ref={ref} 
@@ -38,8 +40,8 @@ export default function SectionWrapper({
       className={`relative overflow-hidden ${className}`}
     >
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: isMobile ? 0 : 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: isMobile ? 0 : 20 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="will-change-transform gpu"
       >

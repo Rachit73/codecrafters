@@ -12,7 +12,7 @@ function HumanAnimeAvatar({ color, delay }: { color: string, delay: number }) {
     if (groupRef.current) {
       const t = state.clock.elapsedTime;
       // Entrance scale animation with delay
-      const targetScale = t > delay ? 1 : 0;
+      const targetScale = 1;
       groupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.08);
       
       // Idle breathing/looking

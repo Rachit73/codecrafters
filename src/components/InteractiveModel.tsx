@@ -1,24 +1,12 @@
-import React, { Suspense, useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, ContactShadows, Float, Environment, PerspectiveCamera, Text, useTexture, Html } from '@react-three/drei';
+import { OrbitControls, ContactShadows, Float, Environment, PerspectiveCamera, Text, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import { LOGO_URL } from '../constants';
-import { Loader2 } from 'lucide-react';
 import { usePerformanceMode } from '../utils/performance';
 
 // Preload the logo texture to avoid async delay
 useTexture.preload(LOGO_URL);
-
-function Loader() {
-  return (
-    <Html center>
-      <div className="flex flex-col items-center gap-3">
-        <Loader2 className="w-10 h-10 text-accent-primary animate-spin" />
-        <span className="text-accent-primary font-mono text-xs uppercase tracking-widest">Loading 3D Model...</span>
-      </div>
-    </Html>
-  );
-}
 
 function ScreenContent({ isLowEnd }: { isLowEnd: boolean }) {
   const logoTexture = useTexture(LOGO_URL);
@@ -208,7 +196,7 @@ function Keyboard({ isLowEnd }: { isLowEnd: boolean }) {
       <group position={[0, 0.22, -0.2]}>
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[4.8, 1.8]} />
-          <meshStandardMaterial color="#1e293b" roughness={0.8} />
+          <meshStandardMaterial color="#475569" roughness={0.8} />
         </mesh>
       </group>
     );
@@ -218,7 +206,7 @@ function Keyboard({ isLowEnd }: { isLowEnd: boolean }) {
     <group position={[0, 0.22, -0.2]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[4.8, 1.8]} />
-        <meshStandardMaterial color="#1e293b" roughness={0.8} metalness={0.2} />
+        <meshStandardMaterial color="#475569" roughness={0.8} metalness={0.2} />
       </mesh>
 
       <instancedMesh ref={instancedMeshRef} args={[undefined, undefined, rows * cols]}>
@@ -252,7 +240,7 @@ function Laptop({ isLowEnd }: { isLowEnd: boolean }) {
         <mesh position={[0, 0.1, 0]}>
           <boxGeometry args={[5.4, 0.2, 3.8]} />
           <meshStandardMaterial 
-            color="#1e293b" 
+            color="#cbd5e1" 
             metalness={isLowEnd ? 0.5 : 1} 
             roughness={0.2} 
           />
@@ -267,7 +255,7 @@ function Laptop({ isLowEnd }: { isLowEnd: boolean }) {
           <mesh position={[0, 1.7, 0.05]}>
             <boxGeometry args={[5.4, 3.4, 0.1]} />
             <meshStandardMaterial 
-              color="#1e293b" 
+              color="#cbd5e1" 
               metalness={isLowEnd ? 0.5 : 1} 
               roughness={0.2} 
             />
@@ -279,14 +267,7 @@ function Laptop({ isLowEnd }: { isLowEnd: boolean }) {
           <meshStandardMaterial color="#000000" roughness={0.5} />
         </mesh>
 
-        <Suspense fallback={
-          <mesh position={[0, 1.7, 0.105]}>
-            <planeGeometry args={[5.2, 3.2]} />
-            <meshBasicMaterial color="#020617" />
-          </mesh>
-        }>
-          <ScreenContent isLowEnd={isLowEnd} />
-        </Suspense>
+        <ScreenContent isLowEnd={isLowEnd} />
       </group>
     </group>
   );
@@ -305,7 +286,10 @@ export default React.memo(function InteractiveModel() {
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   // Custom component to handle the logic inside Canvas
@@ -351,9 +335,7 @@ export default React.memo(function InteractiveModel() {
           <directionalLight position={[5, 5, 5]} intensity={1.5} color="#00F5D4" />
         )}
         
-        <Suspense fallback={null}>
-          <Environment preset="studio" />
-        </Suspense>
+        <Environment preset="studio" />
         
         <OrbitControls
           ref={controlsRef}
@@ -387,7 +369,7 @@ export default React.memo(function InteractiveModel() {
       style={{ touchAction: 'pan-y' }}
     >
       <Canvas 
-        dpr={isLowEnd ? 1 : (isMobile ? [1, 1.5] : [1, 2])}
+        dpr={isLowEnd ? 1 : (isMobile ? [1, 1.2] : [1, 2])}
         shadows={!isLowEnd}
         gl={{ 
           antialias: !isLowEnd, 

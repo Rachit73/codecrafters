@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
-import { useSmoothScroll } from '../context/SmoothScrollContext';
 
 interface LegalModalProps {
   isOpen: boolean;
@@ -10,26 +9,19 @@ interface LegalModalProps {
 }
 
 export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
-  const { lenis } = useSmoothScroll();
-
   useEffect(() => {
     if (isOpen) {
-      // Stop Lenis scroll
-      if (lenis) lenis.stop();
       // Fallback: prevent body scroll
       document.body.style.overflow = 'hidden';
     } else {
-      // Start Lenis scroll
-      if (lenis) lenis.start();
       // Restore body scroll
       document.body.style.overflow = 'unset';
     }
 
     return () => {
-      if (lenis) lenis.start();
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, lenis]);
+  }, [isOpen]);
   const content = {
     privacy: {
       title: 'Privacy Policy',
@@ -121,7 +113,6 @@ export default function LegalModal({ isOpen, onClose, type }: LegalModalProps) {
             {/* Body */}
             <div 
               className="p-6 overflow-y-auto custom-scrollbar overscroll-contain"
-              data-lenis-prevent
             >
               <div className="space-y-8">
                 {activeContent.sections.map((section, index) => (
