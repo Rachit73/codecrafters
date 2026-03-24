@@ -1,4 +1,4 @@
-import React, { useRef, Suspense, useState, useEffect } from 'react';
+import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, OrbitControls, ContactShadows, useProgress } from '@react-three/drei';
 import * as THREE from 'three';
@@ -129,28 +129,14 @@ function HumanAnimeAvatar({ color, delay }: { color: string, delay: number }) {
 
 export default React.memo(function Founder3DCard({ color, delay }: { color: string, delay: number }) {
   const { isLowEnd } = usePerformanceMode();
-  const [shouldRender, setShouldRender] = useState(false);
 
-  useEffect(() => {
-    // Delay rendering the heavy canvas to avoid jank during section entrance
-    const timer = setTimeout(() => {
-      setShouldRender(true);
-    }, 800 + (delay * 1000)); // Wait for section animation to finish
-    return () => clearTimeout(timer);
-  }, [delay]);
-
-  if (isLowEnd || !shouldRender) {
+  if (isLowEnd) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-bg-primary/50 to-bg-secondary relative overflow-hidden transition-opacity duration-500">
         <div 
           className="w-32 h-32 rounded-full blur-[40px] opacity-20 animate-pulse"
           style={{ backgroundColor: color }}
         />
-        {!shouldRender && !isLowEnd && (
-          <div className="absolute inset-0 flex items-center justify-center">
-             <div className="w-8 h-8 border-2 border-white/10 border-t-white/30 rounded-full animate-spin" />
-          </div>
-        )}
         <div className="relative z-10 text-center">
           <div className="w-16 h-16 mx-auto rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
             <div className="w-8 h-8 rounded-full" style={{ backgroundColor: color }} />
@@ -162,7 +148,7 @@ export default React.memo(function Founder3DCard({ color, delay }: { color: stri
 
   return (
     <div className="w-full h-full relative z-0 cursor-grab active:cursor-grabbing bg-gradient-to-b from-transparent to-black/20 animate-in fade-in duration-1000">
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={null}>
         <Canvas 
           camera={{ position: [0, 0, 5.5], fov: 50 }} 
           dpr={1} // Lock DPR to 1 for better performance

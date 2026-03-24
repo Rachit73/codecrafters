@@ -45,8 +45,7 @@ export default function SectionWrapper({
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="will-change-transform gpu"
       >
-        {/* Only render children if they have been in view at least once to save memory/CPU */}
-        {isRendered ? children : <div className="min-h-[200px]" />}
+        {children}
       </motion.div>
     </section>
   );

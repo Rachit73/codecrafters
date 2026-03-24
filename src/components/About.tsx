@@ -33,7 +33,7 @@ export default function About() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            transition={{ delay: 0.05 }}
             className="text-4xl md:text-5xl font-display font-bold text-text-primary mb-6"
           >
             The Minds Behind <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-primary to-accent-secondary">Code Crafter</span>
@@ -42,7 +42,7 @@ export default function About() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 0.1 }}
             className="text-text-secondary max-w-3xl mx-auto text-lg leading-relaxed"
           >
             Code Crafter is a modern digital agency focused on crafting powerful, scalable, and innovative tech solutions. We blend cutting-edge technology with premium design to help businesses thrive in the digital age.
