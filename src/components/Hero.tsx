@@ -19,9 +19,9 @@ export default function Hero({ setActiveSection }: HeroProps) {
   };
 
   const transition = (delay: number) => ({
-    duration: isMobile ? 0.6 : 0.8, // Faster on mobile
-    delay: isMobile ? delay * 0.5 : delay, // Snappier delay on mobile
-    ease: [0.16, 1, 0.3, 1] as [number, number, number, number] // Custom cubic-bezier for smoother feel
+    duration: isMobile ? 0.4 : 0.5, // Even faster
+    delay: isMobile ? delay * 0.3 : delay * 0.5, // Reduced delay
+    ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
   });
 
   return (

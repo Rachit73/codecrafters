@@ -54,13 +54,13 @@ function AppContent() {
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
       
       <main className="flex-grow pt-24">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={activeSection}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             {renderSection()}
           </motion.div>
