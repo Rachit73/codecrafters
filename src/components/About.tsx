@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import Founder3DCard from './Founder3DCard';
+import FounderCard from './FounderCard';
 import { usePerformanceMode } from '../utils/performance';
 
 import SectionWrapper from './SectionWrapper';
@@ -53,52 +53,22 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
           
           {/* Founder 1: Vineet Tiwari */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex flex-col"
-          >
-            <div className="h-[400px] rounded-2xl overflow-hidden glass border border-white/10 mb-8 relative group bg-bg-primary/30">
-              <Founder3DCard color="#00F5D4" delay={0.2} />
-              {!isLowEnd && (
-                <div className="absolute inset-0 border-2 border-accent-primary/0 group-hover:border-accent-primary/50 transition-colors duration-500 rounded-2xl pointer-events-none" />
-              )}
-            </div>
-            
-            <div className="px-2">
-              <h4 className="text-3xl font-display font-bold text-text-primary mb-2">Vineet Tiwari</h4>
-              <p className="text-accent-primary font-medium text-lg mb-4 tracking-wide uppercase text-sm">Founder & Owner</p>
-              <p className="text-text-secondary leading-relaxed">
-                Vineet is the visionary force behind Code Crafter. With a deep passion for software architecture and innovative design, he leads the agency's mission to transform complex problems into elegant, scalable digital solutions. His expertise in full-stack development ensures that every project is built on a solid, future-proof foundation.
-              </p>
-            </div>
-          </motion.div>
+          <FounderCard
+            name="Vineet Tiwari"
+            role="Founder & Owner"
+            description="Vineet is the visionary force behind Code Crafter. With a deep passion for software architecture and innovative design, he leads the agency's mission to transform complex problems into elegant, scalable digital solutions. His expertise in full-stack development ensures that every project is built on a solid, future-proof foundation."
+            color="#00F5D4"
+            delay={0.2}
+          />
 
           {/* Founder 2: Pratyush Mishra */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-            className="flex flex-col md:mt-16"
-          >
-            <div className="h-[400px] rounded-2xl overflow-hidden glass border border-white/10 mb-8 relative group bg-bg-primary/30">
-              <Founder3DCard color="#3B82F6" delay={0.4} />
-              {!isLowEnd && (
-                <div className="absolute inset-0 border-2 border-accent-secondary/0 group-hover:border-accent-secondary/50 transition-colors duration-500 rounded-2xl pointer-events-none" />
-              )}
-            </div>
-            
-            <div className="px-2">
-              <h4 className="text-3xl font-display font-bold text-text-primary mb-2">Pratyush Mishra</h4>
-              <p className="text-accent-secondary font-medium text-lg mb-4 tracking-wide uppercase text-sm">CEO & Co-Founder</p>
-              <p className="text-text-secondary leading-relaxed">
-                Pratyush drives the strategic vision and operational excellence at Code Crafter. Combining a sharp business acumen with a profound understanding of emerging technologies, he bridges the gap between client goals and technical execution. He is dedicated to delivering premium user experiences and measurable business outcomes.
-              </p>
-            </div>
-          </motion.div>
+          <FounderCard
+            name="Pratyush Mishra"
+            role="CEO & Co-Founder"
+            description="Pratyush drives the strategic vision and operational excellence at Code Crafter. Combining a sharp business acumen with a profound understanding of emerging technologies, he bridges the gap between client goals and technical execution. He is dedicated to delivering premium user experiences and measurable business outcomes."
+            color="#3B82F6"
+            delay={0.4}
+          />
 
         </div>
       </div>

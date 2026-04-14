@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import InteractiveModel from './InteractiveModel';
+import HeroAnimation from './HeroAnimation';
 import { usePerformanceMode } from '../utils/performance';
 
 interface HeroProps {
@@ -43,14 +43,14 @@ export default function Hero({ setActiveSection }: HeroProps) {
       </div>
 
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
-        {/* Interactive 3D Model */}
+        {/* Interactive Animation */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={transition(0)}
           className="w-full mb-4 will-change-transform gpu"
         >
-          <InteractiveModel />
+          <HeroAnimation />
         </motion.div>
 
         {/* Text Content */}

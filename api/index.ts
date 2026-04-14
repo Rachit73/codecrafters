@@ -27,14 +27,25 @@ app.post("/api/chat", async (req, res) => {
   // 1. Try Groq first (Primary)
   if (groqKey && groqKey.trim() !== "") {
     try {
-      console.log("Using Groq as primary AI service...");
+      console.log(`Using Groq as primary AI service (Key length: ${groqKey.trim().length})...`);
       const groq = new Groq({ apiKey: groqKey.trim() });
+      
+      // Try Llama 3.3 first, then fallback to Llama 3.1 if needed
       const completion = await groq.chat.completions.create({
         messages: [{ role: "system", content: systemPrompt }, ...messages],
         model: "llama-3.3-70b-versatile",
         temperature: 0.7,
         max_tokens: 1024,
         stream: true,
+      }).catch(async (err) => {
+        console.warn("Llama 3.3 failed, trying Llama 3.1:", err.message);
+        return await groq.chat.completions.create({
+          messages: [{ role: "system", content: systemPrompt }, ...messages],
+          model: "llama-3.1-70b-versatile",
+          temperature: 0.7,
+          max_tokens: 1024,
+          stream: true,
+        });
       });
 
       res.setHeader('Content-Type', 'text/event-stream');
@@ -45,7 +56,21 @@ app.post("/api/chat", async (req, res) => {
       res.write('data: [DONE]\n\n');
       return res.end();
     } catch (e: any) {
-      console.warn("Groq failed:", e.message || e);
+      console.error("Groq API Error:", e.message || e);
+      // If Groq fails with a specific error (like 401), return it immediately so the user knows
+      if (e.status === 401 || e.status === 403) {
+        return res.status(e.status).json({ 
+          error: "GROQ_AUTH_FAILED", 
+          details: "Invalid Groq API Key. Please check your Vercel Environment Variables." 
+        });
+      }
+      if (e.status === 429) {
+        return res.status(429).json({ 
+          error: "GROQ_RATE_LIMIT", 
+          details: "Groq Rate Limit Exceeded. Please try again in a few moments." 
+        });
+      }
+      console.warn("Falling back to Gemini due to Groq error...");
     }
   }
 
